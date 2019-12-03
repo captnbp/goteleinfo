@@ -9,8 +9,8 @@ import (
 	"os"
 	"sync"
 
-	teleinfo "github.com/j-vizcaino/goteleinfo"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	teleinfo "github.com/yocarbo/goteleinfo"
 )
 
 func readFrames(reader teleinfo.Reader, framesChan chan<- teleinfo.Frame) {
