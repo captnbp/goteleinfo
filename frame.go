@@ -3,6 +3,7 @@ package teleinfo
 import (
 	"bytes"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
 	"strconv"
 )
 
@@ -71,7 +72,53 @@ func decodeFrame(rawFrame []byte) (Frame, error) {
 			incrementErrorCounter(frameDecodeErrorCounter, "checksum_error")
 			return nil, fmt.Errorf("error decoding frame, invalid checksum (field: '%s', value: '%s', read: '%c', expected: '%c'", name, value, readChecksum, expectedChecksum)
 		}
-		info[string(name)] = string(value)
+		nameString := string(name)
+		valueString := string(value)
+		valueFloat := 0.0
+
+		switch nameString {
+		case "ADCO", "PPOT":
+			// We don't collect theses metrics
+		case "HCHC":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoHeureCreuseGauge.Set(valueFloat)
+		case "HCHP":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoHeurePleinesGauge.Set(valueFloat)
+		case "HHPHC":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoProgrammationHeuresPleinesHeuresCreusesGauge.With(prometheus.Labels{"programme": valueString}).Set(1)
+		case "IINST1", "IINST2", "IINST3":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			phase := string(nameString[len(nameString)-1])
+			teleinfoIntensiteInstantaneeGauge.With(prometheus.Labels{"phase": phase}).Set(valueFloat)
+		case "IMAX1", "IMAX2", "IMAX3":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			phase := string(name[len(name)-1])
+			teleinfoIntensiteMaximaleGauge.With(prometheus.Labels{"phase": phase}).Set(valueFloat)
+		case "ISOUSC":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoIntensiteSouscriteGauge.Set(valueFloat)
+		case "MOTDETAT":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoModeEtatCompteurGauge.Set(valueFloat)
+		case "OPTARIF":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoOptionTarifaireChoisieGauge.With(prometheus.Labels{"tarif": valueString}).Set(1)
+		case "PAPP":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoPuissanceApparenteTriphaseGauge.Set(valueFloat)
+		case "PMAX":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoPuissanceMaximaleTriphaseGauge.Set(valueFloat)
+		case "PTEC":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoPeriodeTarifaireEnCoursGauge.With(prometheus.Labels{"tarif": valueString}).Set(1)
+		default:
+			incrementErrorCounter(frameDecodeErrorCounter, "unknown_field")
+			return nil, fmt.Errorf("Error creating metric, Unknown field (field: '%s', value: '%s')", name, value)
+		}
+		info[nameString] = valueString
 	}
 	frameDecodedCounter.Inc()
 	return info, nil
