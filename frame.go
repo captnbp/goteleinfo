@@ -165,6 +165,9 @@ func decodeHistoricFrame(rawFrame []byte) (Frame, error) {
 		case "PAPP":
 			valueFloat, _ = strconv.ParseFloat(valueString, 64)
 			teleinfoPuissanceApparenteTriphaseGauge.Set(valueFloat)
+		case "BASE":
+			valueFloat, _ = strconv.ParseFloat(valueString, 64)
+			teleinfoBaseGauge.Set(valueFloat)
 		case "PMAX":
 			valueFloat, _ = strconv.ParseFloat(valueString, 64)
 			teleinfoPuissanceMaximaleTriphaseGauge.Set(valueFloat)
