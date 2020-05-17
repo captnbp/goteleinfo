@@ -145,7 +145,7 @@ func decodeHistoricFrame(rawFrame []byte) (Frame, error) {
 		case "HHPHC":
 			valueFloat, _ = strconv.ParseFloat(valueString, 64)
 			teleinfoProgrammationHeuresPleinesHeuresCreusesGauge.With(prometheus.Labels{"programme": valueString}).Set(1)
-		case "IINST1", "IINST1", "IINST2", "IINST3":
+		case "IINST", c"IINST1", "IINST2", "IINST3":
 			valueFloat, _ = strconv.ParseFloat(valueString, 64)
 			phase := string(nameString[len(nameString)-1])
 			teleinfoIntensiteInstantaneeGauge.With(prometheus.Labels{"phase": phase}).Set(valueFloat)
