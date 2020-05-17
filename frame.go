@@ -149,7 +149,7 @@ func decodeHistoricFrame(rawFrame []byte) (Frame, error) {
 			valueFloat, _ = strconv.ParseFloat(valueString, 64)
 			phase := string(nameString[len(nameString)-1])
 			teleinfoIntensiteInstantaneeGauge.With(prometheus.Labels{"phase": phase}).Set(valueFloat)
-		case "IMAX1", "IMAX2", "IMAX3":
+		case "IMAX", "IMAX1", "IMAX2", "IMAX3":
 			valueFloat, _ = strconv.ParseFloat(valueString, 64)
 			phase := string(name[len(name)-1])
 			teleinfoIntensiteMaximaleGauge.With(prometheus.Labels{"phase": phase}).Set(valueFloat)

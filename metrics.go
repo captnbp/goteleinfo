@@ -76,6 +76,7 @@ var (
 		},
 		[]string{"phase"},
 	)
+	// "IMAX": "060",          Intensité maximale par phase (A)
 	// "IMAX1": "060",         Intensité maximale par phase (A)
 	// "IMAX2": "060",         Intensité maximale par phase (A)
 	// "IMAX3": "060",         Intensité maximale par phase (A)
