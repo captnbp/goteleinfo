@@ -51,6 +51,12 @@ var (
 			Name: "teleinfo_heures_pleines_total",
 			Help: "Total des Heures Pleines en Wh",
 		})
+		// "BASE": "002663019",     Heures de base (Wh)
+		teleinfoBaseGauge = promauto.NewGauge(
+			prometheus.GaugeOpts{
+				Name: "teleinfo_base_total",
+				Help: "Total tarif de base en Wh",
+			})
 	// "HHPHC": "A",            Horaire Heures Pleines Heures Creuses
 	teleinfoProgrammationHeuresPleinesHeuresCreusesGauge = promauto.NewGaugeVec(
 		prometheus.GaugeOpts{
