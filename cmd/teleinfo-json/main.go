@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	teleinfo "github.com/yocarbo/goteleinfo"
+	teleinfo "github.com/captnbp/goteleinfo"
 )
 
 func readFrames(reader teleinfo.Reader, framesChan chan<- teleinfo.Frame) {
