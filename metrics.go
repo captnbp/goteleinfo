@@ -65,6 +65,7 @@ var (
 		},
 		[]string{"programme"},
 	)
+	// "IINST": "003",         Intensité Instantanée par phase (A)
 	// "IINST1": "000",        Intensité Instantanée par phase (A)
 	// "IINST2": "006",        Intensité Instantanée par phase (A)
 	// "IINST3": "001",        Intensité Instantanée par phase (A)
